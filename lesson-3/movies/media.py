@@ -13,3 +13,6 @@ class Movie() :
     
   def show_trailer(self):
     webbrowser.open(self.trailer_youtube_url)
+    
+  def __str__(self):
+    return ("Title: "+ str(self.title) + "\n" + "Storyline: " + str(self.storyline) + "\n" + "Poster: " + str(self.poster_image_url) + "\n"+ "Trailer" + str(self.trailer_youtube_url) + "\n")
