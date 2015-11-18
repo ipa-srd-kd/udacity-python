@@ -1,4 +1,5 @@
 # Don't do this at home or at all
+# 5 sins of debugging
 # 1. Scatter output statements everywhere
 # 2. Debug the program into existence (add and remove lines)
 # 3. Never back up earlier versions
@@ -35,3 +36,14 @@ def remove_html_markup(s):
 
 print remove_html_markup('<a href="baar>">foo</a>')
 print remove_html_markup('"<b>foo</b>"')   
+
+# Before fix:
+# 2. proceed systematically 
+# 4. understand what the program should do
+# 5. fix the problem, bot the symptom
+
+# Classification
+# bug = defect: error in code
+# failure = visible by user
+
+# defect result in infection which result in failure
