@@ -1,0 +1,82 @@
+################################
+###### Introduction  ###########
+################################
+
+
+Don't do this at home or at all
+5 sins of debugging
+1. Scatter output statements everywhere (print)
+2. Debug the program into existence (add and remove lines)
+3. Never back up earlier versions
+4. Don't bother understanding what the program should do.
+5. Use the most obvious fix
+
+Before fix:
+2. proceed systematically 
+4. understand what the program should do
+5. fix the problem, bot the symptom
+
+Classification
+bug = defect: error in code
+failure = visible by user
+
+defect result in infection which result in failure
+
+Scientific Method
+1. Initial Observation
+2. Hypothesis             <-|
+3. Prediciton               |  support/refine .... reject/create new
+4. Experiment               | 
+5. Oberservation          >-| 
+6. Theory
+
+Scientific Method
+1. Code, Failure, run, more runs
+2. Hypothesis             <-|
+3. Prediciton               |  support/refine .... reject/create new
+4. Experiment               | 
+5. Oberservation          >-| 
+6. Diagnosis
+
+TEST Hypotheses -> Experiments
+
+Powerful Debugging: "assert condition"
+
+
+
+Rule of the thump:
+If (fix bug in equal or less 5 minutes)
+  do it   => IMPLICIT DEBUGGING
+else 
+  scientific method  => EXPLICIT DEBUGGING
+  
+  
+  
+#######################################
+######## EXPLICIT DEBUGGING ###########
+#######################################
+
+Stop keeping everything in your head! (for longer than 5 minutes)
+
+make notes of scientific method
+
+Input -> Expectation -> Output
+
+Hypothesis (status)  confirmed/rejected
+Experiments
+
+
+===> LOG
+
+Advantages:
+1. Revise what you did => not repetition
+2. Resume at any time  => everything is logged
+3. Problems may become obvious at a second glance
+
+===> structured thinking
+
+Sometimes it helps telling others about
+
+===> Talk to the toy-bear before asking a helper  
+  
+  
