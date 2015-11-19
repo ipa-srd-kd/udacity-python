@@ -16,6 +16,7 @@ def remove_html_markup(s):
   out = ""
   
   for c in s:
+    assert (tag or not quote)
     # print tag
     # print quote
     # print out
@@ -126,7 +127,10 @@ test_vector=[["'foo'","'foo'"],
              ["foo","foo"],
              ['<a href=">">foo</a>',"foo"]]
 
-
+# Check for future revision #
+#############################
+# state "quote and not tag" shouldn't be reached
+# assertion: "assert (tag or not quote)" is usable 
 
 # run experiements #
 ####################
