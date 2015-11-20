@@ -1,0 +1,45 @@
+# built-in assertion advantages #
+#################################
+
+1. Identification  (which assertion)
+2. Location (where in the code)
+3. Optional (turn on/off)
+4. Standardized (everybody can interpret)
+
+# C/C++ #
+#########
+include <assert.h>
+assert(sqrt(9.0) == 2.0)
+
+foo.c:9:assertion failed: sqrt(9.0) == 2.0 # Output
+
+
+
+# Test #
+########
+Assertion in a test - check a single run
+
+# Debugging #
+#############
+Assertion in the code - checkl all run
+
+
+# PRE/POSTCONDITION #
+#####################
+shorten the cause-effec-chaine 
+
+
+# Assertions Forever #
+######################
+Assertions in the code are there to stay
+- catching errors
+- testing
+- documentation
+
+# tool chain #
+##############
+I.   Test inputs
+II.  preconditions
+III. postconditions
+
+  too permissive <====> too strict
