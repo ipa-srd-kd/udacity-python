@@ -8,6 +8,11 @@ class Time:
     self._minutes = int(m)
     self._seconds = int(s)
     
+  def invariant_check(self):
+    assert 0 <= self.hours() <= 23
+    assert 0 <= self.minutes() <= 59
+    assert 0 <= self.seconds() <= 60
+  
   def hours(self):
     return self._hours
     
@@ -20,6 +25,18 @@ class Time:
   def __repr__(self):
     return "{:02d}:{:02d}:{:02d}".format(self.hours(), self.minutes(), 
            self.seconds())
+     
+  def seconds_since_midnight(self):
+    return self.hours() * 3600 + self.minutes() * 60 + self.seconds()
+    
+  def advance(self, s):
+    self.invariant_check()
+    old_seconds = self.seconds_since_midnight()
+    
+    # some complex code
+    
+    self.invariant_check()
+    assert(self.seconds_since_midnight() )
            
            
 
