@@ -1,4 +1,4 @@
-import lesson1_lib
+import html_lib
 
 
 def html_removal(function,test_vect):
@@ -21,7 +21,7 @@ test_vector=[['<a>foo</a>','foo'],
              ['"bar"','bar'],
              ['""','']]
 
-#html_removal(lesson1_lib.remove_html_markup_original,test_vector) 
+#html_removal(html_lib.remove_html_markup_original,test_vector) 
 
 
 # Hypothesis 1: Double quotes are stripped from toggled input
@@ -36,7 +36,7 @@ test_vector=[['"foo"','"foo"'],
              ['""','']]
 
 
-#html_removal(lesson1_lib.remove_html_markup_print,test_vector) 
+#html_removal(html_lib.remove_html_markup_print,test_vector) 
 
 #-> no tags! Still quotes stripped
 
@@ -49,7 +49,7 @@ test_vector=[['"foo"','"foo"'],
 ## Experiments
 test_vector=[['"foo"','assertionException']]
 
-#html_removal(lesson1_lib.remove_html_markup_tag,test_vector) 
+#html_removal(html_lib.remove_html_markup_tag,test_vector) 
 
 # Assertion not called
 
@@ -61,7 +61,7 @@ test_vector=[['"foo"','assertionException']]
 test_vector=[['"foo"','assertionException']]
 
 
-#html_removal(lesson1_lib.remove_html_markup_quote,test_vector) 
+#html_removal(html_lib.remove_html_markup_quote,test_vector) 
 #-> Difference between single and double quotes?
 
 # Experiment 2.1: Evaluate single quote conditon #
@@ -70,7 +70,7 @@ test_vector=[['"foo"','assertionException']]
 test_vector=[["'foo'","'foo'"],
              ['"foo"','"foo"']]
 
-#html_removal(lesson1_lib.remove_html_markup_original,test_vector) 
+#html_removal(html_lib.remove_html_markup_original,test_vector) 
 
 # wrong line of code
 # elif c == '"' or c == "'" and tag:
@@ -89,5 +89,5 @@ test_vector=[["'foo'","'foo'"],
              ["foo","foo"],
              ['<a href=">">foo</a>',"foo"]]
 
-html_removal(lesson1_lib.remove_html_markup_fixed,test_vector) 
+html_removal(html_lib.remove_html_markup_fixed,test_vector) 
 
