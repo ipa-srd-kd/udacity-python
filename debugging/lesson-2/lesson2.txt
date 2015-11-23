@@ -1,45 +1,147 @@
-# built-in assertion advantages #
-#################################
+############
+# Overview #
+############
+sqrt(x, eps):
+x >= 0               # PREcondition:  
+y= sqrt(x)
+               # INvariant:
+y * y == 2 + eps()   # POSTcondition: 
+
+#####################################
+### built-in assertion advantages ###
+#####################################
 
 1. Identification  (which assertion)
 2. Location (where in the code)
 3. Optional (turn on/off)
 4. Standardized (everybody can interpret)
 
-# C/C++ #
-#########
+#############
+### C/C++ ###
+#############
 include <assert.h>
 assert(sqrt(9.0) == 2.0)
 
 foo.c:9:assertion failed: sqrt(9.0) == 2.0 # Output
 
 
-
-# Test #
-########
+############
+### Test ###
+############
 Assertion in a test - check a single run
 
-# Debugging #
-#############
+#################
+### Debugging ###
+#################
 Assertion in the code - checkl all run
 
-
-# PRE/POSTCONDITION #
-#####################
+#########################
+### PRE/POSTCONDITION ###
+#########################
 shorten the cause-effec-chaine 
 
+PRECONDITION:
+restraints at the beginng of a function (qualification to enter the function)
 
-# Assertions Forever #
-######################
+POSTCONDITON:
+check result with a validation function (inverse to the postcondition)
+
+#################
+### INVARIANT ###
+#################
+prevent missuse of functions
+check internal state
+
+
+
+
+##########################
+### Assertions Forever ###
+##########################
 Assertions in the code are there to stay
 - catching errors
 - testing
 - documentation
 
-# tool chain #
-##############
+##################
+### Tool chain ###
+##################
 I.   Test inputs
 II.  preconditions
 III. postconditions
 
   too permissive <====> too strict
+  
+#############################  
+### Assertions take time! ###
+#############################
+turn on/off in Compiler:
+Python: Compiler: "-O"        # turn off 
+C/C++:  Compiler: "-DNDEBUG"  # 
+        In File before #include <assert.h>: #define NDEBUG
+Java:   Compiler: "-ea"       # enable assertion
+
+######################################################
+### Assertion aren't allowed to cause sideeffects! ###
+######################################################
+
+assert map.remove(location) == True   # nein nein nein
+  ### Call to function gets lost fi assertion are turned off
+
+mapRemoval = map.remove(location)
+assert mapRemoval
+  ### Call to function stays even if assertions turned off. This is the proper 
+  ### way
+  
+  
+####################################
+# Don't check public preconditions #
+####################################
+If it's a requirement than don't use an assertion. Use a simple check, because 
+they check 
+
+
+#############################################
+# PRO & CON of assertion in production code #
+#############################################
+PRO:
++ Failing is better than bad data
++ Eases debuggung
++ defects are hard to track
+
+CON:
+- Performance (try performance critic things with and without asserts to check 
+  performance. If no difference -> leave it in)
+- Performance
+- user unfriendly
+
+#####################################
+# Condition that shouldn't happen #
+###################################
+#building code:
+raise AssertionException
+#production code:
+try.. catch ..
+
+
+
+
+
+###################################
+# Getting started with Assertions #
+###################################
+1. Define data invariants
+    => cover much space 
+    => frequently checked
+    => form (implicit) pre- and postcondition
+    => provide helpful documentation
+2. Provide preconditions
+3. Provide (partial-) postconditions
++. Run a system invariant checker
++. Use valgrind
+
+
+###################
+# Are there tools #
+###################
+DAIKON
