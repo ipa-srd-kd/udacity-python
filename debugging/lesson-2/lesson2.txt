@@ -42,17 +42,27 @@ shorten the cause-effec-chaine
 
 PRECONDITION:
 restraints at the beginng of a function (qualification to enter the function)
+  
+  sqrt(x,eps):
+  assert x >= 0
 
 POSTCONDITON:
 check result with a validation function (inverse to the postcondition)
+  
+  sqrt(x,eps):
+  y = sqrt(x)
+  assert abs((y * y) - x) <= eps   
 
 #################
 ### INVARIANT ###
 #################
 prevent missuse of functions
-check internal state
-
-
+check internal state (range of values):
+  
+  setTime(h,m,s)
+  assert 0 <= h <= 23
+  assert 0 <= m <= 59
+  assert 0 <= s <= 60 (additional second to fix time)
 
 
 ##########################
