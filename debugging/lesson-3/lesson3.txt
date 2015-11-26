@@ -1,0 +1,71 @@
+#############################
+###  Simplifying Failures ###
+#############################
+Tao of Simplifying:
+"The goal of simplifying the test case is to make it so simple that changing any
+aspect of it changes the behaviour of the error" - Steve McConnel
+
+
+
+Want to know the cause of an failure
+  -> find the minimum of factors that cause it
+  
+  
+Tasks:
+  How to simplify failures
+  How to do this automatically
+  
+  
+Naive Way:
+  Remove parts until everything runs
+  Put the specific part back in and look further for additonal causes of failure  
+  
+ 
+What is it that makes something simple?
+  Human Burdens:
+    Burden to understand something (understand something in 10 seconds is simpler than in 10 minutes)
+    Burden to explain something (less affort to explain something)
+    
+    
+    
+Bugreport: need relevant information
+
+
+########################################
+### A Simple Process for Simplifying ###
+########################################
+
+For every circumstance of the problem, check whether it is relevant for the problem to occur
+If (not): remove it!
+
+
+#############################
+### manual simplification ###
+#############################
+  - tedious
+  - boring
+  
+################################
+### automated simplification ###
+################################
+need:
+  strategy
+  automated test (-> simplification succeeded)
+  
+  
+#####################
+### Binary Search ###
+#####################
+manuel:
+ - Throw away half the input and see if the input and see if the output is still wrong
+ - If (not): go back to the previous state and discard the other half of the input
+ 
+ 
+#######################
+### Delta Debugging ###
+#######################
+1. Split input into n subsets (initially, n=2)
+2. If removing any of these subsets fails, proceed with this subset (n:= max(n-1,2))
+3. Otherwise, increase granualtiy: (n:=min(2n,input))
+
+until it starst removing 1 character -> every letter is relevant
