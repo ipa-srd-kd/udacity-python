@@ -69,3 +69,36 @@ manuel:
 3. Otherwise, increase granualtiy: (n:=min(2n,input))
 
 until it starst removing 1 character -> every letter is relevant
+
+####################
+### Fuzz Testing ###
+####################
+
+Random Inputs for a program or API
+
+Workflow:
+  1. test program with fuzzy tests and find inputs that caus failure
+  2. use delta debugging with erroenous inputs and the program  
+
+#####################################
+### Yesterday it works, today not ###
+#####################################
+Regressiontests!
+
+Workflow:
+  1. Apply Patch
+  2. Build Code
+  3. Run Test
+  
+-> automated build facilities
+-> version needs to control exact and smale changes
+
+partial implemented in git bisect (using git blame)
+
+
+########################
+### Cause and Effect ###
+########################
+actual cause:
+  aussumes and changes as little as possible, yet changes the effect
+
