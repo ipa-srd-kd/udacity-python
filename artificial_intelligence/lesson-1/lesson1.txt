@@ -1,0 +1,5 @@
+################################
+### Lesson 1 - Localization ####
+################################
+
+Maximum Confusion: each point in the world has the same probability
