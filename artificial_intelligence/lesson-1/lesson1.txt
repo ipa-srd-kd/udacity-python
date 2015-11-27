@@ -14,6 +14,28 @@ Maximum Confusion: each point in the world has the same probability
 3. change probability on observation
 4. go to 2
 
-##################################################
-### Steps to include motion in our locaization ###
-##################################################
+######################
+### Sense and Move ###
+######################
+Initial Belief
+   |
+   v
+Sense: gain information  (entropy up)
+   |       ^
+   v       |
+Move: lose information  (entropy down)
+
+
+Entropy: Measure of Information
+-SUM(p(Xi) * log(p(Xi)) )
+
+
+###############
+### Summary ###
+###############
+
+Belief = Probability
+Sense = Product followed by Normalization
+Move = Convolution (= Addition)
+
+

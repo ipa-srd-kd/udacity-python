@@ -6,6 +6,18 @@ eps = sys.float_info.epsilon
 #p=[0.2, 0.2, 0.2, 0.2, 0.2]
 #print p
 sys.float_info.epsilon
+
+
+#############################
+### Probability Assertion ###
+#############################
+def probability_assertion(vect):
+  for i in range(len(vect)):
+    assert 0 <= vect[i] <= 1
+  assert abs(sum(vect)-1) <= eps
+
+
+
 #############################################
 #### equal distribution over n Positions ####
 #############################################
@@ -26,7 +38,7 @@ def initial_probability(n):
   for i in range(0, n):
     probability_vect.append(1.0/n)
   assert (len(probability_vect) == n)
-  assert (abs(sum(probability_vect) - 1.0) <= eps)
+  probability_assertion(probability_vect)
   return probability_vect
 
 #############################################
@@ -38,6 +50,7 @@ def normalize(vect):
     vect[i] = vect[i]/vect_sum  
   return vect
 
+# sense
 def update(probability_vect, world_vect, observation):
   assert len(probability_vect) == len(world_vect)
   
@@ -54,7 +67,8 @@ def update(probability_vect, world_vect, observation):
 #    probability_vect[i] = probability_vect[i] * ((hit * pHit + (1-hit) * pMiss))
   ## normalize
   probability_vect = normalize(probability_vect)  
-  assert (abs(sum(probability_vect) - 1.0) <= eps)
+  
+  probability_assertion(probability_vect)
   return probability_vect
 
 ######################################
@@ -75,7 +89,7 @@ def move(prob_vect, movement):
       res_vect.append(prob_vect[(i - movement) % len(prob_vect)])
   res_vect = normalize(res_vect)
   assert len(res_vect) == len(prob_vect)
-  assert (abs(sum(res_vect) - 1.0) <= eps) 
+  probability_assertion(res_vect) 
   return res_vect
 
 ########################################
@@ -99,12 +113,13 @@ def move_inacc(p_vect, mv):
   
   res_vect = normalize(res_vect)
   assert len(res_vect) == len(p_vect)
-  assert (abs(sum(res_vect) - 1.0) <= eps)
+  probability_assertion(res_vect)
   return res_vect
 
 #####################
 ### Main Function ###
 #####################
+
 '''
 world = ["green", "red", "red", "green", "green"]
 n = len(world)
@@ -120,17 +135,31 @@ for i in range(len(observation_vect)):
   print("Observation:    "+str(observation_vect[i]))
   print(str(i)+". Update:      "+str(probabilities))      
 '''
-'''
 ## Test accurate motion model
+'''
 print "Shifting test"
 alias = [0, 0, 1, 0, 0]
 movement = [3, 2, 1, 0, -1, -2, -3]
 for i in range(len(movement)):
   print str(movement[i])+": "+str(move(alias, movement[i]))
 '''
-## test inaccurate motion model
+## Test inaccurate motion model
+'''
 #inacc_test_vect = initial_probability(5)
 inacc_test_vect =[1, 0, 0, 0, 0]
 for i in range(1000):
   inacc_test_vect = move_inacc(inacc_test_vect,1)
 print inacc_test_vect
+'''
+## Test with motion
+world = ["green", "red", "red", "green", "green"]
+n = len(world)
+prob = initial_probability(n)
+measurements = ["green", "red", "red", "green"]
+motions = [1,1,1,1]
+
+for i in range(len(motions)):
+  prob = update(prob, world, measurements[i])
+  prob = move(prob, motions[i])
+  print str(i)+". "+str(prob)
+
