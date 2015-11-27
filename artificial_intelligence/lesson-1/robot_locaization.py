@@ -1,8 +1,11 @@
 import sys
+
+
+eps = sys.float_info.epsilon
 #### equal distribution over 5 Positions ####
 #p=[0.2, 0.2, 0.2, 0.2, 0.2]
 #print p
-
+sys.float_info.epsilon
 #############################################
 #### equal distribution over n Positions ####
 #############################################
@@ -23,13 +26,17 @@ def initial_probability(n):
   for i in range(0, n):
     probability_vect.append(1.0/n)
   assert (len(probability_vect) == n)
-  assert (abs(sum(probability_vect) - 1.0) <= sys.float_info.epsilon)
+  assert (abs(sum(probability_vect) - 1.0) <= eps)
   return probability_vect
 
 #############################################
 ### Update Probabilities with Observation ###
 #############################################
-
+def normalize(vect):
+  vect_sum = sum(vect)
+  for i in range(0, len(vect)):
+    vect[i] = vect[i]/vect_sum  
+  return vect
 
 def update(probability_vect, world_vect, observation):
   assert len(probability_vect) == len(world_vect)
@@ -46,33 +53,59 @@ def update(probability_vect, world_vect, observation):
 #    hit = (observation == world_vect[i])
 #    probability_vect[i] = probability_vect[i] * ((hit * pHit + (1-hit) * pMiss))
   ## normalize
-  probability_sum = sum(probability_vect)
-  for i in range(0, n):
-    probability_vect[i] = probability_vect[i]/probability_sum  
-  assert (abs(sum(probability_vect) - 1.0) <= sys.float_info.epsilon)
+  probability_vect = normalize(probability_vect)  
+  assert (abs(sum(probability_vect) - 1.0) <= eps)
   return probability_vect
 
-###############################
-### Robot Movement Function ###
-###############################
+######################################
+### Accurate Robot Motion Function ###
+######################################
 
 # movement =  0       -> no movement
 # movement =  1.. n   -> 1..n step(s) to the right
 # movement = -1 .. -n -> 1..n step(s) to the left   
 def move(prob_vect, movement): 
   assert type(movement) == int
+  assert (abs(sum(prob_vect) - 1.0) <= eps)
   res_vect=[]
   if movement == 0:
-    return prob_vect   
-  for i in range(len(prob_vect)):
-    res_vect.append(prob_vect[(i - movement) % len(prob_vect)])
+    res_vect = prob_vect   
+  else:
+    for i in range(len(prob_vect)):
+      res_vect.append(prob_vect[(i - movement) % len(prob_vect)])
+  res_vect = normalize(res_vect)
+  assert len(res_vect) == len(prob_vect)
+  assert (abs(sum(res_vect) - 1.0) <= eps) 
   return res_vect
 
+########################################
+### Inaccurate Robot Motion Function ###
+### mv     - movement
+### p_vect - probability vector
+########################################
+def move_inacc(p_vect, mv): 
+  #motion_model = [0.1, 0.8, 0.1]
+  assert type(mv) == int
+  assert (abs(sum(p_vect) - 1.0) <= eps)
+  pExact = 0.8
+  pUndershoot = 0.1
+  pOvershoot = 0.1
+  res_vect=[]
+  for i in range(len(p_vect)):
+    s =     p_vect[((i-1) - mv) % len(p_vect)] * pUndershoot
+    s = s + p_vect[(i - mv)     % len(p_vect)] * pExact
+    s = s + p_vect[((i+1) - mv) % len(p_vect)] * pOvershoot    
+    res_vect.append(s)
+  
+  res_vect = normalize(res_vect)
+  assert len(res_vect) == len(p_vect)
+  assert (abs(sum(res_vect) - 1.0) <= eps)
+  return res_vect
 
 #####################
 ### Main Function ###
 #####################
-
+'''
 world = ["green", "red", "red", "green", "green"]
 n = len(world)
 probabilities = initial_probability(n)
@@ -86,12 +119,18 @@ for i in range(len(observation_vect)):
   probabilities = update(probabilities, world, observation_vect[i])
   print("Observation:    "+str(observation_vect[i]))
   print(str(i)+". Update:      "+str(probabilities))      
-
-
+'''
+'''
+## Test accurate motion model
 print "Shifting test"
 alias = [0, 0, 1, 0, 0]
 movement = [3, 2, 1, 0, -1, -2, -3]
 for i in range(len(movement)):
   print str(movement[i])+": "+str(move(alias, movement[i]))
-print()
-
+'''
+## test inaccurate motion model
+#inacc_test_vect = initial_probability(5)
+inacc_test_vect =[1, 0, 0, 0, 0]
+for i in range(1000):
+  inacc_test_vect = move_inacc(inacc_test_vect,1)
+print inacc_test_vect
