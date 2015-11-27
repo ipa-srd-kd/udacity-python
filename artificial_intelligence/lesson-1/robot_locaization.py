@@ -12,10 +12,9 @@ import sys
 #  p.append(1.0/n)    
 #print p
 
-########################################
-### Observation                     ####
-### [green,red,red,red,green,green] ####
-########################################
+#############################
+### Initial Distribution ####
+#############################
 
 def initial_probability(n):
   assert n > 0
@@ -26,6 +25,11 @@ def initial_probability(n):
   assert (len(probability_vect) == n)
   assert (abs(sum(probability_vect) - 1.0) <= sys.float_info.epsilon)
   return probability_vect
+
+#############################################
+### Update Probabilities with Observation ###
+#############################################
+
 
 def update(probability_vect, world_vect, observation):
   assert len(probability_vect) == len(world_vect)
@@ -47,22 +51,47 @@ def update(probability_vect, world_vect, observation):
     probability_vect[i] = probability_vect[i]/probability_sum  
   assert (abs(sum(probability_vect) - 1.0) <= sys.float_info.epsilon)
   return probability_vect
-    
 
+###############################
+### Robot Movement Function ###
+###############################
+
+# movement =  0       -> no movement
+# movement =  1.. n   -> 1..n step(s) to the right
+# movement = -1 .. -n -> 1..n step(s) to the left   
+def move(prob_vect, movement): 
+  assert type(movement) == int
+  res_vect=[]
+  if movement == 0:
+    return prob_vect   
+  for i in range(len(prob_vect)):
+    res_vect.append(prob_vect[(i - movement) % len(prob_vect)])
+  return res_vect
+
+
+#####################
+### Main Function ###
+#####################
 
 world = ["green", "red", "red", "green", "green"]
-print("World:    "+str(world))
 n = len(world)
-print("number of Cell: "+str(n))
-## Prior:
 probabilities = initial_probability(n)
+print("World:    "+str(world))
 print("Initial:        "+str(probabilities))
+print("number of Cell: "+str(n))
 
 ## P(probabilities | observation)  Posterior Distribution:
 observation_vect = ["red", "red", "green", "green"]
 for i in range(len(observation_vect)):
-  print("Observation:    "+str(observation_vect[i]))
   probabilities = update(probabilities, world, observation_vect[i])
+  print("Observation:    "+str(observation_vect[i]))
   print(str(i)+". Update:      "+str(probabilities))      
 
+
+print "Shifting test"
+alias = [0, 0, 1, 0, 0]
+movement = [3, 2, 1, 0, -1, -2, -3]
+for i in range(len(movement)):
+  print str(movement[i])+": "+str(move(alias, movement[i]))
+print()
 

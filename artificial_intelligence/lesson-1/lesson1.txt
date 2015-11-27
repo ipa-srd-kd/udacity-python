@@ -3,3 +3,17 @@
 ################################
 
 Maximum Confusion: each point in the world has the same probability
+
+
+#############################
+### Steps to Localization ###
+#############################
+
+1. initialze
+2. make observation
+3. change probability on observation
+4. go to 2
+
+##################################################
+### Steps to include motion in our locaization ###
+##################################################
