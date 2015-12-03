@@ -46,31 +46,38 @@
 #############################################
 ### Update Probabilities with Observation ###
 #############################################
-def normalize(vect):
-  vect_sum = sum(vect)
-  for i in range(0, len(vect)):
-    vect[i] = vect[i]/vect_sum  
-  return vect
+def normalize(mat):
+  mat_sum = 0
+  for i in range(len(mat)):
+    mat_sum = mat_sum + sum(mat[i])
+  #sqprint mat_sum 
+  for i in range(0, len(mat)):
+    for j in range(0, len(mat[0])):
+      mat[i][j] = mat[i][j]/mat_sum
+  #show(mat)
+  #print "line"  
+  return mat
 
 # sense
-def update(probability_vect, world_vect, observation):
-  assert len(probability_vect) == len(world_vect)
+def update(probability_vect, world_vect, observation, sensor_right):
+  #assert len(probability_vect) == len(world_vect)
   
-  pHit = 0.6
-  pMiss = 0.2
+  pHit = sensor_right
+  pMiss = (1.0 - pHit)
   n = len(probability_vect)
   ## weight
   for i in range(0, n):
-    if world_vect[i] == observation:
-      probability_vect[i] = probability_vect[i] * pHit
-    else:
-      probability_vect[i] = probability_vect[i] * pMiss
-#    hit = (observation == world_vect[i])
-#    probability_vect[i] = probability_vect[i] * ((hit * pHit + (1-hit) * pMiss))
-  ## normalize
+    for j in range(0, len(probability_vect[0])):
+      if world_vect[i][j] == observation:
+        probability_vect[i][j] = probability_vect[i][j] * pHit
+      else:
+        probability_vect[i][j] = probability_vect[i][j] * pMiss
+  #    hit = (observation == world_vect[i])
+  #    probability_vect[i] = probability_vect[i] * ((hit * pHit + (1-hit) * pMiss))
+    ## normalize
   probability_vect = normalize(probability_vect)  
   
-  probability_assertion(probability_vect)
+  #probability_assertion(probability_vect)
   return probability_vect
 
 ########################################
@@ -81,18 +88,18 @@ def update(probability_vect, world_vect, observation):
 def move(p_matrix, mv, p_move): 
   assert type(mv[0]) == int
   assert type(mv[1]) == int
-  assert (abs(sum(p_matrix) - 1.0) <= eps)
+  #assert (abs(sum(p_matrix) - 1.0) <= eps)
   
-  for i in range(len(p_vect)):
-    for j in range(len(p_vect[0])):
+  for i in range(len(p_matrix)):
+    for j in range(len(p_matrix[0])):
       s =     p_matrix[i-mv[0]][j-mv[1]] % len(p_matrix[i]) * p_move
-      s = s + p_matrix[i][j] % len(p_matrix[i]) * (1.0 - p_move)
+      s = s + p_matrix[i][j] % len(p_matrix[i]) * (1.0 - p_move)      
       p_matrix[i][j] = s
   
   #res_vect = normalize(res_vect)
   #assert len(res_vect) == len(p_vect)
   #probability_assertion(res_vect)
-  return res_vect
+  return p_matrix
 
 #####################
 ### Main Function ###
@@ -104,9 +111,14 @@ def localize(colors,measurements,motions,sensor_right,p_move):
   p = [[pinit for row in range(len(colors[0]))] for col in range(len(colors))]
     
   # >>> Insert your code here <<<
+  print "Initial:"
+  show(p)
   for i in range(len(motions)):
     p = move(p, motions[i], p_move)
-    p = update(p, world, measurements[i])
+    print "Round "+ str(i) + " move:"
+    show(p)
+    p = update(p, colors, measurements[i], sensor_right)
+    print "Round "+ str(i) + " update:"
     show(p)  
   return p
 
@@ -128,5 +140,5 @@ colors = [['R','G','G','R','R'],
           ['R','R','R','R','R']]
 measurements = ['G','G','G','G','G']
 motions = [[0,0],[0,1],[1,0],[1,0],[0,1]]
-p = localize(colors,measurements,motions,sensor_right = 0.7, p_move = 0.8)
+p = localize(colors,measurements,motions,sensor_right = 1.0, p_move = 1.0)
 show(p) # displays your answer
