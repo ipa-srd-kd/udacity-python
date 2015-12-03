@@ -78,20 +78,20 @@ def update(probability_vect, world_vect, observation):
 ### mv     - movement
 ### p_vect - probability vector
 ########################################
-def move_inacc(p_matrix, mv, p_move): 
-  assert type(mv) == int
+def move(p_matrix, mv, p_move): 
+  assert type(mv[0]) == int
+  assert type(mv[1]) == int
   assert (abs(sum(p_matrix) - 1.0) <= eps)
   
   for i in range(len(p_vect)):
-    for j in range(len(p_vect[0]))
-      s =     p_matrix[i][j] % len(p_matrix[i]) *
-      s = s + p_vect[(i - mv)     % len(p_vect)] * pExact
-      s = s + p_vect[((i+1) - mv) % len(p_vect)] * pOvershoot    
-      p_matrix[j][i] = s
+    for j in range(len(p_vect[0])):
+      s =     p_matrix[i-mv[0]][j-mv[1]] % len(p_matrix[i]) * p_move
+      s = s + p_matrix[i][j] % len(p_matrix[i]) * (1.0 - p_move)
+      p_matrix[i][j] = s
   
-  res_vect = normalize(res_vect)
-  assert len(res_vect) == len(p_vect)
-  probability_assertion(res_vect)
+  #res_vect = normalize(res_vect)
+  #assert len(res_vect) == len(p_vect)
+  #probability_assertion(res_vect)
   return res_vect
 
 #####################
@@ -105,9 +105,9 @@ def localize(colors,measurements,motions,sensor_right,p_move):
     
   # >>> Insert your code here <<<
   for i in range(len(motions)):
-    prob = move(prob, motions[i], p_move)
-    prob = update(prob, world, measurements[i])
-      
+    p = move(p, motions[i], p_move)
+    p = update(p, world, measurements[i])
+    show(p)  
   return p
 
 def show(p):
