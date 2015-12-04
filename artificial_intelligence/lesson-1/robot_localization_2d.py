@@ -89,29 +89,27 @@ def move(p_matrix, mv, p_move):
   assert type(mv[0]) == int
   assert type(mv[1]) == int
   #assert (abs(sum(p_matrix) - 1.0) <= eps)
-  
+  res_matrix = []
   if(mv[0] != 0):
     for i in range(len(p_matrix)):
+      res_matrix.append([])
       for j in range(len(p_matrix[0])):
-        print "i: ",i," j: ",j," mv0:",mv[0]," val: ",p_matrix[i-mv[0]][j]
         s =     p_matrix[i-mv[0]][j] % len(p_matrix) * p_move
-        print s
         s = s + p_matrix[i][j] % len(p_matrix) * (1.0 - p_move)      
-        print s
-        p_matrix[i][j] = s
+        res_matrix[i].append(s)
   elif(mv[1] != 0):
     for i in range(len(p_matrix)):
-      for j in range(len(p_matrix[i])):
-        print "i: ",i," j: ",j," mv1:",mv[1]," j: ",(j-mv[1])% len(p_matrix[i])," val: ",p_matrix[i][(j-mv[1])% len(p_matrix[i])]
+      res_matrix.append([])
+      for j in range(len(p_matrix[0])):
         s =     p_matrix[i][(j-mv[1])% len(p_matrix[i])]  * p_move
-        print s
         s = s + p_matrix[i][j] % len(p_matrix[i]) * (1.0 - p_move)      
-        print s
-        p_matrix[i][j] = s
+        res_matrix[i].append(s)
+  else:
+    res_matrix = p_matrix
   #res_vect = normalize(res_vect)
   #assert len(res_vect) == len(p_vect)
   #probability_assertion(res_vect)
-  return p_matrix
+  return res_matrix
 
 #####################
 ### Main Function ###
@@ -123,15 +121,15 @@ def localize(colors,measurements,motions,sensor_right,p_move):
   p = [[pinit for row in range(len(colors[0]))] for col in range(len(colors))]
     
   # >>> Insert your code here <<<
-  print "Initial:"
-  show(p)
+  #print "Initial:"
+  #show(p)
   for i in range(len(motions)):
     p = move(p, motions[i], p_move)
-    print "Round "+ str(i) + " move:"
-    show(p)
+    #print "Round "+ str(i) + " move:"
+    #show(p)
     p = update(p, colors, measurements[i], sensor_right)
-    print "Round "+ str(i) + " update:"
-    show(p)  
+    #print "Round "+ str(i) + " update:"
+    #show(p)  
   return p
 
 def show(p):
@@ -152,5 +150,21 @@ colors = [['R','G','G','R','R'],
           ['R','R','R','R','R']]
 measurements = ['G','G','G','G','G']
 motions = [[0,0],[0,1],[1,0],[1,0],[0,1]]
-p = localize(colors,measurements,motions,sensor_right = 1.0, p_move = 1.0)
+p = localize(colors,measurements,motions,sensor_right = 0.7, p_move = 0.8)
 show(p) # displays your answer
+
+
+
+
+
+"""
+test=[[1,2,3,4],
+      [5,6,7,8],
+      [9,10,11,12]]
+check=[[1,2,3,4],
+       [5,6,7,8],
+       [9,10,11,12]]
+       
+var = move(test,[0,1],1.0)
+show(var)
+"""
