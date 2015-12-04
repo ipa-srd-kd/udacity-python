@@ -89,28 +89,36 @@ def move(p_matrix, mv, p_move):
   assert type(mv[0]) == int
   assert type(mv[1]) == int
   #assert (abs(sum(p_matrix) - 1.0) <= eps)
+  """
   res_matrix = []
   if(mv[0] != 0):
     for i in range(len(p_matrix)):
       res_matrix.append([])
       for j in range(len(p_matrix[0])):
-        s =     p_matrix[i-mv[0]][j] % len(p_matrix) * p_move
-        s = s + p_matrix[i][j] % len(p_matrix) * (1.0 - p_move)      
+        s =     p_matrix[(i - mv[0]) % len(p_matrix)][j] * p_move
+        s = s + p_matrix[i % len(p_matrix)][j] * (1.0 - p_move)      
         res_matrix[i].append(s)
   elif(mv[1] != 0):
     for i in range(len(p_matrix)):
       res_matrix.append([])
       for j in range(len(p_matrix[0])):
-        s =     p_matrix[i][(j-mv[1])% len(p_matrix[i])]  * p_move
-        s = s + p_matrix[i][j] % len(p_matrix[i]) * (1.0 - p_move)      
+        s =     p_matrix[i][(j - mv[1]) % len(p_matrix[i])]  * p_move
+        s = s + p_matrix[i][j % len(p_matrix[i])] * (1.0 - p_move)      
         res_matrix[i].append(s)
   else:
     res_matrix = p_matrix
+  """
+  p_res = [[0.0 for row in range(len(colors[0]))] for col in range(len(colors))]
+  
+  for i in range(len(p_matrix)):
+    for j in range(len(p_matrix[i])):
+      p_res[i][j] = ((p_move * p_matrix[(i - mv[0]) % len(p_matrix)][(j - mv[1]) % len(p_matrix[i])]) 
+                      + ((1.0 - p_move) * p_matrix[i][j])) 
   #res_vect = normalize(res_vect)
   #assert len(res_vect) == len(p_vect)
   #probability_assertion(res_vect)
-  return res_matrix
-
+  #return res_matrix
+  return p_res
 #####################
 ### Main Function ###
 #####################
@@ -152,10 +160,19 @@ measurements = ['G','G','G','G','G']
 motions = [[0,0],[0,1],[1,0],[1,0],[0,1]]
 p = localize(colors,measurements,motions,sensor_right = 0.7, p_move = 0.8)
 show(p) # displays your answer
-
-
-
-
+"""
+colors = [['R', 'G'],
+          ['R', 'R'],
+          ['G', 'R'],
+          ['R', 'G'],
+          ['G', 'G']]
+measurements = ['R', 'R', 'G', 'G', 'G', 'R']
+motions = [[0, 0], [-1, 0], [0, 1], [0, -1], [0, 1], [1, 0]]
+sensor_right = 0.99
+p_move = 0.97
+p = localize(colors,measurements,motions,sensor_right = 0.7, p_move = 0.8)
+show(p) # displays your answer
+"""
 
 """
 test=[[1,2,3,4],
