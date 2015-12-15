@@ -155,14 +155,18 @@ print z_two
 ##################
 ### Exercise 3 ###
 ##################
-# initialize 1000 particles
-
+# 1. initialize 1000 particles
+# 2. move
 
 N = 1000
 p = []
 
-#enter code here
+#initialize particles
 for i in range(N):
     p.append(robot())
+
+#move particles
+for i in range(N):
+    p[i] = p[i].move(0.1,5)
 
 print len(p)
