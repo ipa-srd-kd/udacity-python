@@ -140,7 +140,7 @@ print z_two
 ##################
 # Add Noise
 # Forawrd = 5.0, turn_noise = 0.1, sense_noise = 5.0
-
+"""
 myrobot = robot()
 myrobot.set_noise(5.0, 0.1, 5.0)
 myrobot.set(30.0, 50.0, pi/2)
@@ -150,4 +150,19 @@ print z_one
 myrobot = myrobot.move(-pi/2,10.0)
 z_two = myrobot.sense()
 print z_two
+"""
 
+##################
+### Exercise 3 ###
+##################
+# initialize 1000 particles
+
+
+N = 1000
+p = []
+
+#enter code here
+for i in range(N):
+    p.append(robot())
+
+print len(p)
