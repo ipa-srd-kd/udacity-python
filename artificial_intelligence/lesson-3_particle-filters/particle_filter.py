@@ -111,7 +111,6 @@ def eval(r, p):
     return sum / float(len(p))
 
 
-
 ####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 
 ##################
@@ -163,10 +162,22 @@ p = []
 
 #initialize particles
 for i in range(N):
-    p.append(robot())
+    r = robot()
+    r.set_noise(0.05, 0.05, 5.0)
+    p.append(r)
 
 #move particles
+p2 = []
 for i in range(N):
-    p[i] = p[i].move(0.1,5)
-
+    p2.append(p[i].move(0.1,5))
 print len(p)
+
+#sense and weight
+w = []
+for i in range(N):
+  Z = p2[i].sense()
+  w.append(p2[i].measurement_prob(Z))
+print len(w)
+
+
+
