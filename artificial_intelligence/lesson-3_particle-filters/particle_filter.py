@@ -151,12 +151,13 @@ z_two = myrobot.sense()
 print z_two
 """
 
-##################
-### Exercise 3 ###
-##################
-# 1. initialize 1000 particles
-# 2. move
-# 3. importance weight
+###################################
+### Exercise 3.1, 3.2, 3.3, 3.4 ###
+###################################
+# 3.1. initialize 1000 particles
+# 3.2. move
+# 3.3. importance weight
+# 3.4. normalize weights
 
 N = 1000
 p = []
@@ -181,5 +182,10 @@ for i in range(N):
   w.append(p[i].measurement_prob(Z))
 print len(w)
 
-
-
+# normalize
+W = sum(w)
+alpha = []
+for i in range(N):
+  alpha.append(w[i]/W)
+  
+assert( abs(sum(alpha) - 1.0) <= 0.000001)
