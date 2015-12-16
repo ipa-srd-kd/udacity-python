@@ -156,6 +156,7 @@ print z_two
 ##################
 # 1. initialize 1000 particles
 # 2. move
+# 3. importance weight
 
 N = 1000
 p = []
@@ -163,7 +164,7 @@ p = []
 #initialize particles
 for i in range(N):
     r = robot()
-    r.set_noise(0.05, 0.05, 5.0)
+    r.set_noise(0.05, 0.05, 5.0) ## required for measurement_prob(Z)
     p.append(r)
 
 #move particles
@@ -171,12 +172,13 @@ p2 = []
 for i in range(N):
     p2.append(p[i].move(0.1,5))
 print len(p)
+p = p2
 
 #sense and weight
 w = []
 for i in range(N):
-  Z = p2[i].sense()
-  w.append(p2[i].measurement_prob(Z))
+  Z = p[i].sense()
+  w.append(p[i].measurement_prob(Z))
 print len(w)
 
 
