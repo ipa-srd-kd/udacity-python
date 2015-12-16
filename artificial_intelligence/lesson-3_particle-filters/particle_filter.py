@@ -158,7 +158,7 @@ print z_two
 # 3.2. move
 # 3.3. importance weight
 # 3.4. normalize weights
-
+"""
 N = 1000
 p = []
 
@@ -189,3 +189,20 @@ for i in range(N):
   alpha.append(w[i]/W)
   
 assert( abs(sum(alpha) - 1.0) <= 0.000001)
+"""
+##################
+### Exercise 4 ###
+##################
+# Probability of no seeing p3
+p = [0.6, 1.2, 2.4, 0.6, 1.2]
+n = []
+N= len(p)
+p_sum = sum(p)
+
+for i in range(N):
+  n.append(p[i] / p_sum)
+
+assert( abs(sum(n) - 1.0) <= 0.000001)
+not_p3 = (1.0 - n[2])
+prob_not_p3 = not_p3 ** N # Probability of not seeing p3 in 5 consecutive draws
+print prob_not_p3
