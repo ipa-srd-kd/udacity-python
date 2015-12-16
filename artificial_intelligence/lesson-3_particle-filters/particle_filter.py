@@ -198,7 +198,27 @@ prob = w_norm
 ########
 ## wheel selection
 
-
+# my implementation
+"""
+p3 = []
+accu = 0.0
+rand_idx = int(random.uniform(0, N-1))
+for i in range(N):
+  x = random.uniform(0, sum(prob))
+  idx = rand_idx
+  accu = prob[rand_idx]
+  #print "x",x
+  while x > accu:
+    #print x, accu
+    idx = (idx + 1) % N
+    accu += prob[idx]
+  p3.append(p[idx])
+  #print len(p3)
+p = p3
+print p
+"""
+#smart implementation
+"""
 p3 = []    
 for i in range(N):
    r = random.uniform(0, sum(prob))
@@ -209,11 +229,11 @@ for i in range(N):
    p3.append(p[index])
 p = p3
 print p
-
+"""
 ##################
 ### Exercise 4 ###
 ##################
-# Probability of no seeing p3
+# Probability of not seeing p3
 """
 p = [0.6, 1.2, 2.4, 0.6, 1.2]
 n = []
