@@ -158,42 +158,63 @@ print z_two
 # 3.2. move
 # 3.3. importance weight
 # 3.4. normalize weights
-"""
+
 N = 1000
 p = []
 
-#initialize particles
+########
+## initialize particles
 for i in range(N):
     r = robot()
-    r.set_noise(0.05, 0.05, 5.0) ## required for measurement_prob(Z)
+    r.set_noise(0.05, 0.05, 5.0) ### required for measurement_prob(Z)
     p.append(r)
 
-#move particles
+########
+## move particles
 p2 = []
 for i in range(N):
     p2.append(p[i].move(0.1,5))
 print len(p)
 p = p2
 
-#sense and weight
+########
+## sense and weight
 w = []
 for i in range(N):
   Z = p[i].sense()
   w.append(p[i].measurement_prob(Z))
 print len(w)
 
-# normalize
+########
+## normalize
 W = sum(w)
-alpha = []
+w_norm = []
 for i in range(N):
-  alpha.append(w[i]/W)
+  w_norm.append(w[i]/W)
   
-assert( abs(sum(alpha) - 1.0) <= 0.000001)
-"""
+assert(abs(sum(w_norm) - 1.0) <= 0.000001)
+prob = w_norm
+
+########
+## wheel selection
+
+
+p3 = []    
+for i in range(N):
+   r = random.uniform(0, sum(prob))
+   s = 0.0
+   for index in range(len(prob)):
+       s += w[index]
+       if r < s: break
+   p3.append(p[index])
+p = p3
+print p
+
 ##################
 ### Exercise 4 ###
 ##################
 # Probability of no seeing p3
+"""
 p = [0.6, 1.2, 2.4, 0.6, 1.2]
 n = []
 N= len(p)
@@ -206,3 +227,4 @@ assert( abs(sum(n) - 1.0) <= 0.000001)
 not_p3 = (1.0 - n[2])
 prob_not_p3 = not_p3 ** N # Probability of not seeing p3 in 5 consecutive draws
 print prob_not_p3
+"""
