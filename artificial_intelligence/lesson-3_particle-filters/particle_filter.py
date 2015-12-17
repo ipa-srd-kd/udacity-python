@@ -116,6 +116,84 @@ def eval(r, p):
 
 ####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 
+def particle_filter(old_particle, motion, observation):
+  p = old_particle
+  ########
+  ## move particles
+  p2 = []
+  for i in range(N):
+      p2.append(p[i].move(motion.turn_, motion.forward_))
+  print len(p)
+  p = p2
+
+  ########
+  ## sense and weight
+  w = []
+  for i in range(N):
+    w.append(p[i].measurement_prob(observation))
+  print len(w)
+
+  ########
+  ## normalize
+  W = sum(w)
+  w_norm = []
+  for i in range(N):
+    w_norm.append(w[i]/W)
+    
+  assert(abs(sum(w_norm) - 1.0) <= 0.000001)
+  prob = w_norm
+
+  ########
+  ## rasampling selection
+
+  # my implementation
+  """
+  p3 = []
+  accu = 0.0
+  rand_idx = int(random.uniform(0, N-1))
+  for i in range(N):
+    x = random.uniform(0, sum(prob))
+    idx = rand_idx
+    accu = prob[rand_idx]
+    #print "x",x
+    while x > accu:
+      #print x, accu
+      idx = (idx + 1) % N
+      accu += prob[idx]
+    p3.append(p[idx])
+    #print len(p3)
+  p = p3
+  print p
+  """
+  # thrun wheel
+
+  p3 = []
+  idx = int(random.uniform(0, N-1))
+  beta = 0
+  max_prob = max(prob)
+  for i in range(N):
+    beta = beta + random.random() * 2 * max_prob
+    while prob[idx] < beta:
+      beta = beta - prob[idx]
+      idx = (idx + 1) % N
+    p3.append(p[idx])
+  p = p3
+
+  #smart wheel implementation
+  """
+  p3 = []    
+  for i in range(N):
+     r = random.uniform(0, sum(prob))
+     s = 0.0
+     for index in range(len(prob)):
+         s += w[index]
+         if r < s: break
+     p3.append(p[index])
+  p = p3
+  print p
+  """
+  return p
+
 ##################
 ### Exercise 1 ###
 ##################
@@ -163,7 +241,7 @@ print z_two
 # 3.4. normalize weights
 
 N = 1000
-p = []
+particles = []
 
 ########
 ## initialize particles
@@ -171,7 +249,7 @@ my_real_robot = robot()
 for i in range(N):
     r = robot()
     r.set_noise(0.05, 0.05, 5.0) ### required for measurement_prob(Z)
-    p.append(r)
+    particles.append(r)
 
 ########
 ## define motion
@@ -180,84 +258,12 @@ motions = robot_motion(01., 5.0)
 
 ########
 ## move and sense of the actual robot
-my_real_robot.move(motions.turn_, motions.forward_)
-Z = my_real_robot.sense()
+for i in range(2):
+  my_real_robot.move(motions.turn_, motions.forward_)
+  Z = my_real_robot.sense()
+  particles = particle_filter(particles, motions, Z)
+print particles
 
-########
-## move particles
-p2 = []
-for i in range(N):
-    p2.append(p[i].move(motions.turn_, motions.forward_))
-print len(p)
-p = p2
-
-########
-## sense and weight
-w = []
-for i in range(N):
-  w.append(p[i].measurement_prob(Z))
-print len(w)
-
-########
-## normalize
-W = sum(w)
-w_norm = []
-for i in range(N):
-  w_norm.append(w[i]/W)
-  
-assert(abs(sum(w_norm) - 1.0) <= 0.000001)
-prob = w_norm
-
-########
-## rasampling selection
-
-# my implementation
-"""
-p3 = []
-accu = 0.0
-rand_idx = int(random.uniform(0, N-1))
-for i in range(N):
-  x = random.uniform(0, sum(prob))
-  idx = rand_idx
-  accu = prob[rand_idx]
-  #print "x",x
-  while x > accu:
-    #print x, accu
-    idx = (idx + 1) % N
-    accu += prob[idx]
-  p3.append(p[idx])
-  #print len(p3)
-p = p3
-print p
-"""
-# thrun wheel
-
-p3 = []
-idx = int(random.uniform(0, N-1))
-beta = 0
-max_prob = max(prob)
-for i in range(N):
-  beta = beta + random.random() * 2 * max_prob
-  while prob[idx] < beta:
-    beta = beta - prob[idx]
-    idx = (idx + 1) % N
-  p3.append(p[idx])
-p = p3
-print p
-
-#smart wheel implementation
-"""
-p3 = []    
-for i in range(N):
-   r = random.uniform(0, sum(prob))
-   s = 0.0
-   for index in range(len(prob)):
-       s += w[index]
-       if r < s: break
-   p3.append(p[index])
-p = p3
-print p
-"""
 
 ##################
 ### Exercise 4 ###
