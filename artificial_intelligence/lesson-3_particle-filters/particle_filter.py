@@ -196,7 +196,7 @@ assert(abs(sum(w_norm) - 1.0) <= 0.000001)
 prob = w_norm
 
 ########
-## wheel selection
+## rasampling selection
 
 # my implementation
 """
@@ -217,7 +217,21 @@ for i in range(N):
 p = p3
 print p
 """
-#smart implementation
+# thrun wheel
+
+p3 = []
+idx = int(random.uniform(0, N-1))
+beta = 0
+for i in range(N):
+  beta = beta + random.random() * 2 * max(prob)
+  while prob[idx] < beta:
+    beta = beta - prob[idx]
+    idx = (idx + 1) % N
+  p3.append(p[idx])
+p = p3
+print p
+
+#smart wheel implementation
 """
 p3 = []    
 for i in range(N):
@@ -230,6 +244,7 @@ for i in range(N):
 p = p3
 print p
 """
+
 ##################
 ### Exercise 4 ###
 ##################
