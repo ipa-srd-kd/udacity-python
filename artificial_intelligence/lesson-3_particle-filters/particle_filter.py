@@ -116,28 +116,28 @@ def eval(r, p):
 
 ####   DON'T MODIFY ANYTHING ABOVE HERE! ENTER CODE BELOW ####
 
-def particle_filter(old_particle, motion, observation):
+def particle_filter(old_particle, motion, observation, num_particles):
   p = old_particle
   ########
   ## move particles
   p2 = []
-  for i in range(N):
+  for i in range(num_particles):
       p2.append(p[i].move(motion.turn_, motion.forward_))
-  print len(p)
+  assert(len(p) == num_particles)
   p = p2
 
   ########
   ## sense and weight
   w = []
-  for i in range(N):
+  for i in range(num_particles):
     w.append(p[i].measurement_prob(observation))
-  print len(w)
+  assert(len(w) == num_particles)
 
   ########
   ## normalize
   W = sum(w)
   w_norm = []
-  for i in range(N):
+  for i in range(num_particles):
     w_norm.append(w[i]/W)
     
   assert(abs(sum(w_norm) - 1.0) <= 0.000001)
@@ -151,14 +151,14 @@ def particle_filter(old_particle, motion, observation):
   p3 = []
   accu = 0.0
   rand_idx = int(random.uniform(0, N-1))
-  for i in range(N):
+  for i in range(num_particles):
     x = random.uniform(0, sum(prob))
     idx = rand_idx
     accu = prob[rand_idx]
     #print "x",x
     while x > accu:
       #print x, accu
-      idx = (idx + 1) % N
+      idx = (idx + 1) % num_particles
       accu += prob[idx]
     p3.append(p[idx])
     #print len(p3)
@@ -168,21 +168,21 @@ def particle_filter(old_particle, motion, observation):
   # thrun wheel
 
   p3 = []
-  idx = int(random.uniform(0, N-1))
+  idx = int(random.uniform(0, num_particles-1))
   beta = 0
   max_prob = max(prob)
-  for i in range(N):
+  for i in range(num_particles):
     beta = beta + random.random() * 2 * max_prob
     while prob[idx] < beta:
       beta = beta - prob[idx]
-      idx = (idx + 1) % N
+      idx = (idx + 1) % num_particles
     p3.append(p[idx])
   p = p3
 
   #smart wheel implementation
   """
   p3 = []    
-  for i in range(N):
+  for i in range(num_particles):
      r = random.uniform(0, sum(prob))
      s = 0.0
      for index in range(len(prob)):
@@ -240,6 +240,7 @@ print z_two
 # 3.3. importance weight
 # 3.4. normalize weights
 
+T = 10
 N = 1000
 particles = []
 
@@ -258,11 +259,12 @@ motions = robot_motion(01., 5.0)
 
 ########
 ## move and sense of the actual robot
-for i in range(2):
+for i in range(T):
   my_real_robot.move(motions.turn_, motions.forward_)
   Z = my_real_robot.sense()
-  particles = particle_filter(particles, motions, Z)
-print particles
+  particles = particle_filter(particles, motions, Z, N)
+  print eval(my_real_robot, particles) ## print "correctness"
+#print particles
 
 
 ##################
