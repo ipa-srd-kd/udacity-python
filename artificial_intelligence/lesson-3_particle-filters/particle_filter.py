@@ -222,8 +222,9 @@ print p
 p3 = []
 idx = int(random.uniform(0, N-1))
 beta = 0
+max_prob = max(prob)
 for i in range(N):
-  beta = beta + random.random() * 2 * max(prob)
+  beta = beta + random.random() * 2 * max_prob
   while prob[idx] < beta:
     beta = beta - prob[idx]
     idx = (idx + 1) % N
