@@ -13,7 +13,10 @@
 from math import *
 import random
 
-
+class robot_motion:
+  def __init__(self, turn, forward):
+    self.turn_ = turn
+    self.forward_ = forward
 
 landmarks  = [[20.0, 20.0], [80.0, 80.0], [20.0, 80.0], [80.0, 20.0]]
 world_size = 100.0
@@ -164,16 +167,27 @@ p = []
 
 ########
 ## initialize particles
+my_real_robot = robot()
 for i in range(N):
     r = robot()
     r.set_noise(0.05, 0.05, 5.0) ### required for measurement_prob(Z)
     p.append(r)
 
 ########
+## define motion
+motions = robot_motion(01., 5.0)
+
+
+########
+## move and sense of the actual robot
+my_real_robot.move(motions.turn_, motions.forward_)
+Z = my_real_robot.sense()
+
+########
 ## move particles
 p2 = []
 for i in range(N):
-    p2.append(p[i].move(0.1,5))
+    p2.append(p[i].move(motions.turn_, motions.forward_))
 print len(p)
 p = p2
 
@@ -181,7 +195,6 @@ p = p2
 ## sense and weight
 w = []
 for i in range(N):
-  Z = p[i].sense()
   w.append(p[i].measurement_prob(Z))
 print len(w)
 
