@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # Make a robot called myrobot that starts at
 # coordinates 30, 50 heading north (pi/2).
 # Have your robot turn clockwise by pi/2, move
@@ -256,7 +258,7 @@ for i in range(N):
 
 ########
 ## define motion
-motions = robot_motion(01., 5.0)
+motions = robot_motion(0.1, 5.0)
 
 
 ########
